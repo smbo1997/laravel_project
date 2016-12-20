@@ -39,7 +39,9 @@ class SocialiteController extends Controller {
         ]);
         if (!empty($driver)) {
             $user = $driver->user();
-            $checkFacebookEmailInDb = DB::table('users')->where('email', $user->user['email'])->first();
+            $checkFacebookEmailInDb = DB::table('users')
+                    ->where('email', $user->user['email'])
+                    ->first();
             if ($checkFacebookEmailInDb) {
                 User::where('email', $user->user['email'])
                         ->update(array(
@@ -58,6 +60,10 @@ class SocialiteController extends Controller {
 
             $data = array('email' => $user->user['email'], 'password' => $user->user['email']);
             if (Auth::attempt($data)) {
+                $userId = Auth::user()->id;
+                DB::table('users')
+                        ->where('id', $userId)
+                        ->update(['online'=> 1]);
                 return redirect('/' . $this->language . '/home');
             } else {
                 return redirect('/' . $this->language . '/login');

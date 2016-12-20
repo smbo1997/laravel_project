@@ -59,6 +59,9 @@ Route::post('/getnotreadmessages', 'UserController@getnotreadmessages');
 Route::post('/getnotreadusersmessages', 'UserController@getnotreadusersmessages');
 Route::post('/seemessages', 'UserController@seemessages');
 Route::post('/sendmessagestoemail', 'UserController@sendmessagestoemail');
+//checkOnline
+Route::post('checkOnline', 'UserController@checkOnline');
+
 //email
 Route::get('{locale}/mymail', 'UserController@mymail');
 Route::post('/sendEmailMessage', 'UserController@sendEmailMessage');

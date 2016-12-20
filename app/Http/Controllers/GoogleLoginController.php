@@ -50,6 +50,10 @@ class GoogleLoginController extends Controller {
             $data = array('email' => $user->email, 'password' => $user->email);
 
             if (Auth::attempt($data)) {
+                $userId = Auth::user()->id;
+                DB::table('users')
+                        ->where('id', $userId)
+                        ->update(['online' => 1]);
                 return redirect('/' . $this->language . '/home');
             } else {
                 return redirect('/' . $this->language . '/login');

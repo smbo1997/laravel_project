@@ -165,12 +165,12 @@ class UserController extends Controller {
         $name = $request->user_name;
         if (!empty($name)) {
             $users = DB::select(
-                                'SELECT `users`.`id`,`users`.`first_name`,`users`.`image`,`users`.`last_name`,`user_friends`.`from_user`,`user_friends`.`to_user`,`user_friends`.`status`,`user_friends`.`table_id`
+                            'SELECT `users`.`id`,`users`.`first_name`,`users`.`image`,`users`.`last_name`,`user_friends`.`from_user`,`user_friends`.`to_user`,`user_friends`.`status`,`user_friends`.`table_id`
                                 FROM `users`
                                 LEFT JOIN `user_friends` ON (`users`.`id`=`user_friends`.`from_user` AND (`user_friends`.`to_user` = "' . $userId . '" OR `user_friends`.`to_user` ="NULL")) OR (`users`.`id`=`user_friends`.`to_user` AND (`user_friends`.`from_user` = "' . $userId . '" OR `user_friends`.`from_user` = "NULL"))
                                 WHERE `users`.`ID` <> "' . $userId . '"
                                 AND  `users`.`first_name` LIKE "' . $name . '%" ESCAPE "!"'
-                            );
+            );
             return json_encode(array('users' => $users, 'currentuser' => $userId));
         }
     }
@@ -539,6 +539,16 @@ class UserController extends Controller {
             $message->from($fromMail, $from_name);
             $message->to($to_useremail)->subject('Chat Messages');
         });
+    }
+
+    public function checkOnline(Request $request) {
+        $friendsid = $request->myfriendsId;
+        $onlinefriends = DB::table('users')
+                ->select('id')
+                ->whereIn('id', $friendsid)
+                ->where('online', 1)
+                ->get('*');
+        return json_encode(array('onlineUsers' => $onlinefriends));
     }
 
 }

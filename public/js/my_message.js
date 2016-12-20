@@ -1,10 +1,9 @@
 $(document).ready(function () {
-//    $.getScript("/js/messagenotread.js", function (messageinterval) {  
-//       
-//    });
+
 
     $(window).load(function () {
         $('.notread').css('display', 'none');
+        var Ids = [];
         var userId = $('.messageread').attr('id');
         var token = $("input[name=_token]").val();
         if (userId) {
@@ -20,6 +19,26 @@ $(document).ready(function () {
                         });
 
                     }
+                }
+            });
+        }
+
+        $.each($('.create_chat'), function (key, value) {
+
+            Ids.push(value.value);
+        });
+        if (Ids.length > 0) {
+            $.ajax({
+                url: '/checkOnline',
+                type: 'POST',
+                data: {_token: token, myfriendsId: Ids},
+                success: function (data) {
+                    var jsonData = $.parseJSON(data);
+                    $('.online').text('');
+                    $.each(jsonData.onlineUsers, function (key, value) {
+                        $('#online_user_' + value.id).text('Online');
+
+                    })
                 }
             });
         }
@@ -46,7 +65,7 @@ $(document).ready(function () {
 
         }
     }
-    setInterval(interval, 2000);
+    setInterval(interval, 9000);
 
     var smiles = [
         {
@@ -132,15 +151,16 @@ $(document).ready(function () {
     ];
     function checkonline() {
         var Ids = [];
+        var token = $("input[name=_token]").val();
         $.each($('.create_chat'), function (key, value) {
 
             Ids.push(value.value);
         });
         if (Ids.length > 0) {
             $.ajax({
-                url: '/welcome/checkOnline',
+                url: '/checkOnline',
                 type: 'POST',
-                data: {myfriendsId: Ids},
+                data: {_token: token, myfriendsId: Ids},
                 success: function (data) {
                     var jsonData = $.parseJSON(data);
                     $('.online').text('');
@@ -149,15 +169,14 @@ $(document).ready(function () {
 
                     })
                 }
-
             });
         }
     }
 
 
-    /*setInterval(function () {
-     checkonline()
-     }, 5000);*/
+    setInterval(function () {
+        checkonline()
+    }, 4000);
 
 
 

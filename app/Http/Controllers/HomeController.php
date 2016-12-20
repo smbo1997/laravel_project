@@ -4,15 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
-{
+class HomeController extends Controller {
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->middleware('auth');
     }
 
@@ -21,8 +20,16 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index() {
+        $online = Auth::user()->online;
+        $userId = Auth::user()->id;
+        if ($online !== 1) {
+            DB::table('users')
+                    ->where('id', $userId)
+                    ->update(['online' => 1]);
+        }
+
         return view('home');
     }
+
 }

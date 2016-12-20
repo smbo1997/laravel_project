@@ -7,8 +7,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App;
 use App\Http\Requests;
+use Auth;
+use DB;
 
 class LoginController extends Controller {
+
     private $language;
     private $data = array();
 
@@ -45,11 +48,16 @@ use AuthenticatesUsers;
         $this->redirectTo = '/' . $this->language . '/home';
     }
 
+   
     public function showLoginForm() {
         return view('auth.login')->with($this->data);
     }
 
     public function logout(Request $request, $language) {
+        $currentuser = Auth::user()->id;
+        DB::table('users')
+                ->where('id', $currentuser)
+                ->update(['online' => 0]);
         $this->guard()->logout();
         $request->session()->flush();
         $request->session()->regenerate();
