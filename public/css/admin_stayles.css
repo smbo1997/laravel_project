@@ -1,0 +1,381 @@
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+
+.wrapper {	
+    margin-top: 80px;
+    margin-bottom: 80px;
+}
+.wrapper-reg {	
+    margin-bottom: 80px;
+}
+
+.form-signin {  
+    max-width: 380px;
+    padding: 15px 35px;
+    margin: 0 auto;
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,0.1);  
+
+
+
+    .form-control {
+        position: relative;
+        font-size: 16px;
+        height: auto;
+        padding: 10px;
+
+
+
+        &:focus {
+            z-index: 2;
+        }
+    }
+
+    input[type="text"] {
+        margin-bottom: -1px;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    input[type="password"] {
+        margin-bottom: 20px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+}
+
+.row h2{
+    color:#FFFFFF;
+    font-size: 35px;
+}
+.forgotpassword{
+    float:right;
+}
+.result{
+    font-size: 17px;
+    color: #FFFFFF;
+    margin-left: 35px;
+}
+
+.myProfilTable{
+    max-width: 35%;
+    margin: 0 auto;
+    margin-top: 95px;
+}
+
+.myProfilTable h3{
+    color: #FFFFFF;
+}
+
+
+.myProfilTable table tr td button:focus{
+    outline: none;
+}
+
+.myProfilTable table tr td input{
+    margin-left:35px;
+}
+.myImageTable{
+    max-width: 34%;
+    margin: 0 auto;
+    margin-top: 96px;
+}
+
+.myImageTable table tr td {
+    color:#CCCCCC;
+}
+.myImageTable table tr td img{
+    float:left;
+}
+.myImageTable table tr td span{
+    float:right;
+}
+
+.search{
+    max-width: 34%;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.search table tr td h5 a{
+    color:#FFFFFF;
+}
+
+.search table tr td h5 a:hover{
+    text-decoration: none;
+}
+
+.search table tr td button{
+    float:right;
+    margin-top:20px;
+}
+
+.profile {
+    max-width: 463px;
+    margin: 0 auto;
+    padding: 12px 50px 81px;
+    border: 1px solid #FFFFFF;
+}
+
+
+
+.name{
+    color: #FFFFFF;
+}
+.name a{
+    color: #FFFFFF;
+    text-decoration:none ;
+    margin-left:11px;
+
+}
+
+.profile img {
+    float:right;
+}
+
+
+.deleteAccount{
+    margin-left: 175px;
+}
+
+
+.Friends{
+    color:#FFFFFF;
+}
+
+
+.FriendTB tr {
+    display: inline-block;
+    margin-left: 52px;
+
+}
+
+.FriendTB tr td{
+    display: inline-block;
+    border: 2px solid #FFFFFF;
+    padding: 7px;
+    margin: 4px;
+    width: 300px;
+}
+.FriendTB tr td p a{
+    color: #FFFFFF;
+    font-size:20px;
+}
+.FriendTB tr td p a:hover{
+    text-decoration:none;
+
+}
+.FriendTB tr td img{
+    float:left;
+}
+
+.form-errors{
+    color:#ff0000;
+    font-size:13px;
+}
+
+
+.btn-link:focus{
+    outline: none;
+}
+
+
+
+
+
+.dropbtn {
+    background-image: url(/image/hand.png);
+    background-repeat: no-repeat;
+    outline: none;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+
+
+.dropdown {
+    right: 140px;
+    top: 17px;
+    float: right;
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    border-radius: 2px;
+    top: 32px;
+    right: 7px;
+    padding: 5px;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 93px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 9px 6px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown a:hover {background-color: #f1f1f1}
+
+.show {display:block;}
+
+.profImage img{
+    border:3px solid #fff; 
+    border-radius: 2px;
+    float: left;
+}
+
+.usersName{
+    position: absolute;
+    color: #FFFFFF;
+    font-size: 25px;
+    display: inline-block;
+    bottom: 16px;
+    right: 3px;
+}
+
+.actions{
+    position:relative;
+    left: 150px;
+    top: 22px;
+
+}
+
+.gnimage{
+    clear: both;
+    float:left;
+}
+
+.gntext{
+    font-size: 18px;
+    color: #FFFFFF;
+    text-align: center;
+    margin-top: 16px;
+    margin-left: 16px;
+}
+
+.btngnimage{
+    margin-left:85px ;
+}
+
+.gnfile{
+    margin-left: 12px
+}
+
+.formgroup{
+    right: 592px;
+    position: absolute;
+}
+
+.btngnimageup{
+    margin-left:75px ;
+}
+
+.username{
+    margin-left: 14px;
+}
+.friendsImageul{
+    list-style-type:none ;    
+}
+
+.friendsImageulprofile{
+    margin-top: 96px;
+    width: 670px;
+    margin-left: 252px;
+    list-style-type: none;
+}
+.friendsImage{
+    position: relative;
+    float:left;
+    margin-right: 14px;
+    margin-top:  18px
+}
+
+.Infotable tr td {
+    color:black;
+    text-align: center;
+}
+.lang-div ul {
+    list-style-type: none;
+}
+
+.lang-div ul li{
+    float: right;
+}
+
+.lang-div ul li a{
+    display: block;
+    padding: 6px 6px;
+    text-decoration: none;
+}
+
+
+.lang-div ul li a:hover {
+    background-color:#FFFFFF;
+    padding: 6px 6px;
+    border-radius: 5px;
+}
+
+
+.imgbtn{
+    width: 27px;
+    padding: 3px;
+    height: 27px;
+    background-color: #DADADA;
+    border-radius: 3px;
+    top: 3px;
+    right: 6px;
+    position: absolute;
+    display: none;
+}
+.friendsImage:hover .imgbtn{
+    display: block;
+}
+
+.imgbtn:hover{
+    cursor: pointer;
+}
+
+.user{
+    padding: 8px;
+    color: black;
+    background-color: #DADADA;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.user:hover{
+    color: black;
+}
+
+.user:focus{
+    color: #FFFFFF;
+    text-decoration:none;
+}

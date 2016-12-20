@@ -1,0 +1,328 @@
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+
+.result{
+    font-size: 17px;
+    color: #FFFFFF;
+    margin-left: 35px;
+}
+
+.myProfilTable{
+    max-width: 35%;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+.myProfilTable h3{
+    color:#FFFFFF;
+    margin-bottom:15px;
+}
+
+
+.myProfilTable table tr td button:focus{
+    outline: none;
+}
+
+.myProfilTable table tr td input{
+    margin-left:35px;
+}
+.myImageTable{
+    max-width: 34%;
+    margin: 0 auto;
+    margin-top: 58px;
+}
+
+.myImageTable table tr td {
+    color:#009999;
+}
+.myImageTable table tr td img{
+    float:left;
+}
+.myImageTable table tr td span{
+    float:right;
+}
+
+.search{
+    margin-top: 10px;
+    background-color: #e7e7e7;
+    height: 300px;
+    border-radius: 4px;
+    overflow: auto;
+
+}
+
+.search table tr td h5 a{
+    color:#FFFFFF;
+}
+
+.search table tr td h5 a:hover{
+    text-decoration: none;
+}
+
+.search table tr td button{
+    float:right;
+    margin-top:20px;
+}
+
+.friendsul{
+    list-style-type: none;
+}
+
+
+.friendsul li{
+    float:right;
+}
+
+.profile {
+    max-width: 363px;
+    margin-left: 15px;
+    padding: 8px 8px 8px;
+    border: 1px solid #FFFFFF;
+    border-radius: 5px;
+}
+
+.name{
+    color: #FFFFFF;
+    font-size: 30px;
+}
+
+.profile img {
+    margin-top: -12px;
+    float:right;
+    border-radius: 5px;
+}
+
+
+.deleteAccount{
+    margin-left: 175px;
+}
+
+
+.Friends{
+    color:#FFFFFF;
+}
+
+
+.FriendTB tr {
+    display: inline-block;
+    margin-left: 52px;
+
+}
+
+.FriendTB tr td{
+    display: inline-block;
+    border: 2px solid #FFFFFF;
+    padding: 7px;
+    margin: 4px;
+    width: 300px;
+}
+.FriendTB tr td p a{
+    color: #FFFFFF;
+    font-size:20px;
+}
+.FriendTB tr td p a:hover{
+    text-decoration:none;
+
+}
+.FriendTB tr td img{
+    float:left;
+}
+
+.form-errors{
+    color:#ff0000;
+    font-size:13px;
+}
+
+
+.btn-link:focus{
+    outline: none;
+}
+
+
+
+
+
+.dropbtn {
+    background-image: url(/image/hand.png);
+    background-repeat: no-repeat;
+    outline: none;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+
+
+.profImage img{
+    border:3px solid #fff; 
+    border-radius: 2px;
+    float: left;
+}
+
+.usersName{
+    width: 100%;
+    position: absolute;
+    color: #FFFFFF;
+    font-size: 25px;
+    display: inline-block;
+    bottom: 16px;
+}
+
+.actions{
+    position:relative;
+    left: 150px;
+    top: 22px;
+
+}
+
+.gnimage{
+    clear: both;
+    float:left;
+}
+
+.gntext{
+    font-size: 18px;
+    color: #FFFFFF;
+    text-align: center;
+    margin-top: 16px;
+    margin-left: 16px;
+}
+
+.btngnimage{
+    margin-left:85px ;
+}
+
+.gnfile{
+    margin-left: 12px
+}
+
+.formgroup{
+    right: 592px;
+    position: absolute;
+}
+
+.btngnimageup{
+    margin-left:75px ;
+}
+
+.username{
+    margin-left: 14px;
+    color:#FDFDFD;
+}
+.friendsImageul{
+    list-style-type:none ;    
+}
+
+.friendsImageulprofile{
+    margin-left:225px;
+    list-style-type: none;
+    margin-top: 72px;
+}
+.friendsImage{
+    width: 205px;
+    float: left;
+    margin-right: 30px;
+    margin-top: 22px;
+}
+
+.friendsImage img{
+    border-radius:5px;
+}
+
+.Infotable tr td {
+    color:black;
+    text-align: center;
+}
+.lang-div  {
+    float: right;
+    margin-top: 15px;
+}
+
+.lang-div ul {
+    list-style-type: none;
+}
+
+.lang-div ul li{
+    float: right;
+}
+
+.lang-div ul li a{
+    display: block;
+    padding: 6px 6px;
+    text-decoration: none;
+}
+
+
+.lang-div ul li a:hover {
+    background-color:#FFFFFF;
+    padding: 6px 6px;
+    border-radius: 5px;
+}
+
+#editor1{
+    margin-top: 7px;
+    overflow: scroll;
+    max-height: 300px;
+    height: 15em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.mailcontent{
+    margin-top: 7px;
+    overflow: scroll;
+    max-height: 300px;
+    height: 15em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.popover-example .popover {
+    position: relative;
+    display: block;
+    margin: 20px;
+}
+
+.removeicon{
+    float:right;
+}
+
+.removeicon:hover{
+    cursor: pointer;
+    color:red;
+}
+
+.popover{
+    width: 265px;
+}
+
+
+.notread{
+    width: 17px;
+    display: none;
+    background-color: red;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    font-size: 14px;
+    height: 20px;
+    float: right;
+}
