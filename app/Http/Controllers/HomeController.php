@@ -22,12 +22,12 @@ class HomeController extends Controller {
      */
     public function index() {
         $online = Auth::user()->online;
-        $userId = Auth::user()->id;
-        if ($online !== 1) {
+        $userId = Auth::id();
+//        if ($online !== 1) {
             DB::table('users')
                     ->where('id', $userId)
                     ->update(['online' => 1]);
-        }
+//        }
 
         return view('home');
     }

@@ -27,4 +27,5 @@ return [
     'delete' => 'Delete',
     'download'=>'Download',
     'my_mail' => 'My mail',
+    'friends' => 'friends',
 ];

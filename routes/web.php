@@ -22,7 +22,7 @@ $this->post('{locale}/logout', 'Auth\LoginController@logout')->name('logout');
 $this->get('{locale}/register', 'Auth\RegisterController@showRegistrationForm');
 $this->post('{locale}/register', 'Auth\RegisterController@register');
 $this->get('{locale}/password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm');
-$this->post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
+$this->post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
 $this->get('{locale}/password/reset/{token}', 'Auth\ResetPasswordController@showResetForm');
 $this->post('password/reset', 'Auth\ResetPasswordController@reset');
 //facebook-Login
@@ -41,10 +41,10 @@ Route::post('addimages', 'UserController@addimages')->name('addimages');
 Route::get('{locale}/settings', 'UserController@accountsettings');
 Route::get('{locale}/deleteUserimage/{image_id}', 'UserController@deleteUserimage');
 Route::get('{locale}/downloaUserImage/{image_id}', 'UserController@downloaUserImage');
-Route::post('updatedata', 'UserController@updatedata')->name('updatedata');
+Route::post('/updatedata', 'UserController@updatedata')->name('updatedata');
 //Route::post('/deleteaccount', 'UserController@deleteUser');
-Route::post('searchusers', 'UserController@searchUsers');
-Route::post('deleteFriendFromSearch', 'UserController@deleteFriendFromSearch');
+Route::post('/searchusers', 'UserController@searchUsers');
+Route::post('/deleteFriendFromSearch', 'UserController@deleteFriendFromSearch');
 Route::get('{locale}/myfriends', 'UserController@myfriends');
 Route::get('{locale}/user_profile/{id}', 'UserController@userProfile');
 Route::post('addFriendFromSearch', 'UserController@addFriendFromSearch');
@@ -59,6 +59,12 @@ Route::post('/getnotreadmessages', 'UserController@getnotreadmessages');
 Route::post('/getnotreadusersmessages', 'UserController@getnotreadusersmessages');
 Route::post('/seemessages', 'UserController@seemessages');
 Route::post('/sendmessagestoemail', 'UserController@sendmessagestoemail');
+    // update messages
+Route::post('/update_msg', 'UserController@update_msg');
+    //delete messages
+Route::post('/delete_msg', 'UserController@delete_msg');
+
+
 //checkOnline
 Route::post('checkOnline', 'UserController@checkOnline');
 

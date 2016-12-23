@@ -23,6 +23,7 @@ use App\UsersMessages;
 use Lang;
 use Mail;
 use App\Mail\MyMail;
+use App\Languages;
 
 class UserController extends Controller {
 
@@ -32,11 +33,8 @@ class UserController extends Controller {
 
     public function __construct(Request $request) {
         $this->middleware('auth');
-        $this->language = $request->segment(1);
-        App::setLocale($this->language);
-        // $this->current_page_url = $this->current_page_url(7);
-        //$this->data['current_page_url'] = $this->current_page_url;
-        $this->data['language'] = $this->language;
+        $lang = new Languages();
+        $this->data['language'] =$lang->language;
     }
 
     function current_page_url(Request $request, $n) {
@@ -288,15 +286,32 @@ class UserController extends Controller {
                 ->where('to_user', $currentuser)
                 ->where('delivered', 0)
                 ->update([ 'delivered' => 1]);
+
+
+
+//        $getMessages = DB::table('users_messages')
+//            ->leftJoin('users','users.id', '=', `users_messages.from_user`)
+//                    ->where([
+//                        ['from_user', '=', $currentuser],
+//                        ['to_user', '=', $to_user_id]
+//                    ])
+//                    ->orwhere([
+//                        ['from_user', '=', $to_user_id],
+//                        ['to_user', '=', $currentuser]
+//                    ])
+//                     ->where('delete_msg','!=',$currentuser )
+//            ->get();
+//
+
         $getMessages = DB::select(
-                        'SELECT `users_messages`.`chat_id`,`users_messages`.`images`,`users_messages`.`from_user`,`users_messages`.`to_user`,`users_messages`.`content`,`users_messages`.`created_at`, `users`.`first_name`,`users`.`last_name`     
+                        'SELECT `users_messages`.`chat_id`,`users_messages`.`images`,`users_messages`.`from_user`,`users_messages`.`to_user`,`users_messages`.`content`,`users_messages`.`created_at`, `users_messages`.`created_at`, `users_messages`.`delete_msg`,`users`.`first_name`,`users`.`last_name`
                         FROM `users_messages`
                          LEFT JOIN `users` ON `users`.`id` = `users_messages`.`from_user`
-                        WHERE  (from_user = "' . $currentuser . '" AND to_user="' . $to_user_id . '") OR (from_user ="' . $to_user_id . '" AND to_user="' . $currentuser . '" )
+                        WHERE  ((from_user = "' . $currentuser . '" AND to_user="' . $to_user_id . ' ") OR (from_user ="' . $to_user_id . '" AND to_user="' . $currentuser . '" ))  AND   `users_messages`.`delete_msg` <> "' . $currentuser . '"
                            ORDER BY `users_messages`.`created_at` ASC'
         );
+        //echo '<pre>';print_r($getMessages);
         $count_messages = count($getMessages);
-
         return response()->json(array('getMessages' => $getMessages, 'count_messages' => $count_messages));
     }
 
@@ -359,7 +374,8 @@ class UserController extends Controller {
                         'content' => $messageContent,
                         'delivered' => 0
             ]);
-            return json_encode(array('send' => true));
+            $result_content = DB::table('users_messages')->select('*')->where('content',$messageContent)->where('to_user',$userId)->where('from_user',$fromUserId)->first();
+            return json_encode(array('result_msg' => $result_content));
         }
     }
 
@@ -373,21 +389,21 @@ class UserController extends Controller {
     }
 
     public function receiveUserMessages(Request $request) {
-        $currentuser = Auth::user()->id;
+        $currentuser = Auth::id();
         $messageCount = $request->message_count;
         $userId = $request->userId;
         $getMessages = DB::select(
                         'SELECT `users_messages`.`chat_id`,`users_messages`.`from_user`,`users_messages`.`to_user`,`users_messages`.`content`,`users_messages`.`created_at`, `users`.`first_name`,`users`.`last_name`     
                         FROM `users_messages`
                         LEFT JOIN `users` ON `users`.`id` = `users_messages`.`from_user`
-                        WHERE  (from_user = "' . $currentuser . '" AND to_user="' . $userId . '") OR (from_user ="' . $userId . '" AND to_user="' . $currentuser . '" )
+                        WHERE  ((from_user = "' . $currentuser . '" AND to_user="' . $userId . '") OR (from_user ="' . $userId . '" AND to_user="' . $currentuser . '" ))  AND delete_msg != "' . $currentuser . '"
                         ORDER BY `users_messages`.`created_at` ASC'
         );
 
         if (count($getMessages) > $messageCount) {
             $differentce_messages = count($getMessages) - $messageCount;
             $updatedMessages = DB::table('users_messages')
-                    ->select('users.first_name', 'users.last_name', 'users_messages.from_user', 'users_messages.images', 'users_messages.to_user', 'users_messages.content', 'users_messages.created_at')
+                    ->select('users.first_name', 'users.last_name', 'users_messages.from_user','users_messages.chat_id',  'users_messages.images', 'users_messages.to_user', 'users_messages.content', 'users_messages.created_at')
                     ->leftJoin('users', 'users.id', '=', 'users_messages.from_user')
                     ->where('users_messages.to_user', $currentuser)
                     ->where('users_messages.from_user', $userId)
@@ -549,6 +565,34 @@ class UserController extends Controller {
                 ->where('online', 1)
                 ->get('*');
         return json_encode(array('onlineUsers' => $onlinefriends));
+    }
+
+    public function update_msg(Request $request){
+        $request_all = $request->all();
+        $msg_id = $request_all['msg_id'];
+        $update_content = $request_all['new_msg'];
+        $userdata = DB::table('users_messages')
+            ->where('chat_id', $msg_id)
+            ->update(['content' => $update_content]);
+        return 1;
+    }
+
+    public function delete_msg(Request $request){
+        $auth_id = Auth::id();
+        $request_all = $request->all();
+        $chat_id = $request_all['msg_id'];
+        $delete_msg = DB::table('users_messages')->select('delete_msg')->where('chat_id',$chat_id)->first();
+        $delete = $delete_msg->delete_msg;
+        if($delete_msg->delete_msg == 0){
+
+            DB::table('users_messages')
+                ->where('chat_id', $chat_id)
+                ->update(['delete_msg' => $auth_id]);
+        }
+        else{
+            DB::table('users_messages')->where('chat_id', '=', $chat_id)->delete();
+        }
+        return 1;
     }
 
 }

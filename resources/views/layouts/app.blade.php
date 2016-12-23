@@ -49,34 +49,44 @@ echo json_encode([
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="<?php echo '/' . $language; ?>/home">
+                    <a class="navbar-brand" href="{{ url('/' . $language) }}/home">
                         {{ trans('translate.laravel') }}
                     </a>
                     @if (!Auth::guest())
-                    <a class="navbar-brand" href="<?php echo '/' . $language; ?>/myprofile">
+                    <a class="navbar-brand" href="{{ url('/' . $language) }}/myprofile">
                         {{ trans('translate.my_profile') }}
                     </a>
-                    <a class="navbar-brand" href="<?php echo '/' . $language; ?>/myimages">
+                    <a class="navbar-brand" href="{{ url('/' . $language) }}/myimages">
                         {{ trans('translate.my_images') }}
                     </a>
-                    <a class="navbar-brand" href="<?php echo '/' . $language; ?>/myfriends">
+                    <a class="navbar-brand" href="{{ url('/' . $language) }}/myfriends">
                         {{ trans('translate.my_friends') }}
                     </a>
-                    <a class="navbar-brand messageread" id="<?php echo Auth::user()->id; ?>" href="<?php echo '/' . $language; ?>/mymessages">
+                    <a class="navbar-brand messageread" id="<?php echo Auth::user()->id; ?>" href="{{ url('/' . $language) }}/mymessages">
                         <i class="notread" ></i>
                         {{ trans('translate.my_messages') }}
                     </a>
-                    <a class="navbar-brand" href="<?php echo '/' . $language; ?>/mymail">
+                    <a class="navbar-brand" href="{{ url('/' . $language) }}/mymail">
                         {{ trans('translate.my_mail') }}
                     </a>
+                        <ul class="nav navbar-nav">
+                            &nbsp;<li>
+                                <a href={{url('/en/')}}><img src="../image/en.gif" alt=""></a>
+                            </li>
+                            <li>
+                                <a href={{url('/am/home')}}><img src="../image/hy.gif" alt=""></a>
+                            </li>
+                            <li>
+                                <a href={{url('/ru/home')}}><img src="../image/ru.gif" alt=""></a>
+                            </li>
+                        </ul>
+
                     @endif
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav">
-                        &nbsp;
-                    </ul>
+
                     <!--  <div class="language"> 
                            <a href="/en/"><img src="/public/image/en.gif"></a>
                            <a href="/ru/"><img src="/public/image/ru.gif"></a>
@@ -87,6 +97,7 @@ echo json_encode([
                         @if (Auth::guest())
                         <li><a href="<?php echo '/' . $language; ?>/login">Login</a></li>
                         <li><a href="<?php echo '/' . $language; ?>/register">Register</a></li>
+
                         @else
 
                         <li class="dropdown">
@@ -105,12 +116,17 @@ echo json_encode([
                                         {{ trans('translate.logout') }}
                                     </a>
 
+
+
+
                                     <form id="logout-form" action="<?php echo '/' . $language; ?>/logout" method="POST" style="display: none;">
                                         {{ csrf_field() }}
                                     </form>
                                 </li>
                             </ul>
                         </li>
+
+
                         @endif
                     </ul>
                 </div>

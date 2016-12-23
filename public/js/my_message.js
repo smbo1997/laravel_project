@@ -204,11 +204,11 @@ $(document).ready(function () {
             url: '/user_messages/' + userId,
             type: 'GET',
             success: function (data) {
+                console.log(data)
                 var html = '<div id="message_count" data-count=' + data.count_messages + '>Count Messages' + ' ' + data.count_messages + '</div>';
                 if (data.getMessages.length > 0) {
                     var images = '';
                     $.each(data.getMessages, function (key, value) {
-
                         if (value.from_user == userId) {
                             if (value.images !== null) {
                                 images = '<img src="/users_image/imagesinmessage/' + value.images + '" height="100" width="100">';
@@ -216,12 +216,15 @@ $(document).ready(function () {
                                 images = '';
                             }
 
-                            html += '<div class="media msg ">' +
+                            html += '<div class="media msg id_' + value.chat_id + ' ">' +
                                     '<div class="media-body">' +
                                     '<small class="pull-right time"><i class="fa fa-clock-o"></i>' + value.created_at + '</small>' +
                                     '<h5 class="to_user ">' + value.first_name + ' ' + value.last_name + '</h5>' +
-                                    '<small class="col-lg-10">' + value.content + '</small>' +
+                                    '<small class="col-lg-10" >' + value.content + '</small>' +
                                     '<small class="col-lg-10">' + images + '</small>' +
+                                    '<span class="glyphicon glyphicon-trash delete_msg" id =' + value.chat_id + ' ></span> &nbsp'+
+
+
                                     '</div>' +
                                     '</div>';
                         }
@@ -230,16 +233,18 @@ $(document).ready(function () {
                                 images = '<img src="/users_image/imagesinmessage/' + value.images + '" height="100" width="100">';
                             } else {
                                 images = '';
-                            }
-
-                            html += '<div class="media msg ">' +
+                                html += '<div class="media msg id_' + value.chat_id + ' ">' +
                                     '<div class="media-body">' +
                                     '<small class="pull-right time"><i class="fa fa-clock-o"></i>' + value.created_at + '</small>' +
                                     '<h5 class="media-heading">' + value.first_name + ' ' + value.last_name + '</h5>' +
-                                    '<small class="col-lg-10">' + value.content + '</small>' +
+                                    '<small class="col-lg-10" id="msg_' + value.chat_id + '">' + value.content + '</small>' +
                                     '<small class="col-lg-10">' + images + '</small>' +
+                                    '<span class="glyphicon glyphicon-trash delete_msg" id =' + value.chat_id + ' ></span> &nbsp'+
+                                    '<span type="button"  class="glyphicon glyphicon-wrench update_msg update_msg" data-toggle="modal" id =' + value.chat_id + ' data-target="#myModal"></span>'+
                                     '</div>' +
                                     '</div>';
+                            }
+
 
                         }
                     })
@@ -251,6 +256,59 @@ $(document).ready(function () {
 
         });
     });
+
+    // update msg
+
+    $(document).on( "click", ".update_msg", function() {
+        var msg_id = $(this).attr('id');
+        var msg = $('#msg_'+msg_id).text();
+        $('.modal-body').html( msg);
+        $('.update_my_msg').attr('id', msg_id);
+    });
+
+
+    $(document).on( "click", ".update_my_msg", function() {
+
+        var msg_id = $(this).attr('id');
+        var new_msg = $('.modal-body').html();
+        $.ajax({
+            url: '/update_msg',
+            type: 'POST',
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            data: {msg_id: msg_id, new_msg:new_msg},
+            success: function (data) {
+                if(data == 1){
+                    $('#msg_'+msg_id).html(new_msg);
+                }
+            }
+        });
+    });
+
+
+    // delete msg
+
+    $(document).on( "click", ".delete_msg", function() {
+
+        var msg_id = $(this).attr('id');
+        alert('.id_'+msg_id)
+        $('.id_'+msg_id).remove();
+        $.ajax({
+            url: '/delete_msg',
+            type: 'POST',
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            data: {msg_id: msg_id},
+            success: function (data) {
+                if(data == 1){
+
+                }
+            }
+
+        });
+
+
+    });
+
+
 
     function receiveMessages(userId, message_count) {
         var mydiv = $('.msg-wrap');
@@ -277,6 +335,7 @@ $(document).ready(function () {
                                     '<h5 class="to_user ">' + value.first_name + ' ' + value.last_name + '</h5>' +
                                     '<small class="col-lg-10">' + value.content + '</small>' +
                                     '<small class="col-lg-10">' + image + '</small>' +
+                                    '<span class="glyphicon glyphicon-trash delete_msg" id =' + value.chat_id + ' ></span> &nbsp'+
                                     '</div>' +
                                     '</div>';
                         }
@@ -399,5 +458,6 @@ $(document).ready(function () {
         });
 
     });
+
 
 });

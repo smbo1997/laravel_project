@@ -13,6 +13,7 @@ use DB;
 //use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Auth;
 
+
 class SocialiteController extends Controller {
 
     private $language;

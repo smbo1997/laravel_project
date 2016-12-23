@@ -21,7 +21,7 @@ if (!empty($friendRequest)) {
 }
 ?>
 
-<h1 class="Friends">Friends</h1>
+<h1 class="Friends">{{ trans('translate.friends') }}</h1>
 <hr>
 <div id="frend-div">
     <table class="FriendTB"> 

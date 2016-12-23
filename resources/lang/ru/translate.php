@@ -26,4 +26,5 @@ return [
     'delete' => 'Удалить',
     'download' => 'Скачать',
     'my_mail' => 'Моя почта',
+    'friends' => 'друзья',
 ];

@@ -19,7 +19,11 @@
                         <i id="online_user_<?php echo ($userId == $value->to_user) ? ($value->from_user) : ($value->to_user); ?>" class="online"></i>
                         <div class="media-body">
                             <h5 class="media-heading"> <?php echo $value->first_name . ' ' . $value->last_name; ?></h5>
-                            <small> <button type="button" class="btn btn-link create_chat"  id="user_<?php echo ($userId == $value->to_user) ? ($value->from_user) : ($value->to_user); ?>" value="<?php echo ($userId == $value->to_user) ? ($value->from_user) : ($value->to_user); ?>" useremail="<?php echo $value->email;?>">Send message</button></small>
+                            <small> <button type="button" class="btn btn-link create_chat"
+                                            id="user_<?php echo ($userId == $value->to_user) ? ($value->from_user) : ($value->to_user); ?>"
+                                            value="<?php echo ($userId == $value->to_user) ? ($value->from_user) : ($value->to_user); ?>"
+                                            useremail="<?php echo $value->email;?>">Send message</button>
+                            </small>
                         </div>
                         <i id="usernotsee_<?php echo ($userId == $value->to_user) ? ($value->from_user) : ($value->to_user); ?>" style="float:right; color:red; font-size: 16px"></i>
                     </div>
@@ -85,7 +89,24 @@
             </div>
         </div>
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Update Msg</h4>
+                </div>
+                <p class="modal-body" contenteditable>
 
+                </p>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary update_my_msg" data-dismiss="modal">Update Msg</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script src="{{URL::asset('js/my_message.js')}}"></script>
 @endsection
