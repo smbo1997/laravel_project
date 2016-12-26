@@ -266,9 +266,7 @@ $(document).ready(function () {
         $('.update_my_msg').attr('id', msg_id);
     });
 
-
     $(document).on( "click", ".update_my_msg", function() {
-
         var msg_id = $(this).attr('id');
         var new_msg = $('.modal-body').html();
         $.ajax({
@@ -284,13 +282,9 @@ $(document).ready(function () {
         });
     });
 
-
     // delete msg
-
     $(document).on( "click", ".delete_msg", function() {
-
         var msg_id = $(this).attr('id');
-        alert('.id_'+msg_id)
         $('.id_'+msg_id).remove();
         $.ajax({
             url: '/delete_msg',
@@ -302,13 +296,8 @@ $(document).ready(function () {
 
                 }
             }
-
         });
-
-
     });
-
-
 
     function receiveMessages(userId, message_count) {
         var mydiv = $('.msg-wrap');
@@ -329,7 +318,7 @@ $(document).ready(function () {
                             } else {
                                 var image = '';
                             }
-                            html += '<div class="media msg ">' +
+                            html += '<div class="media msg id_' + value.chat_id + '">' +
                                     '<div class="media-body">' +
                                     '<small class="pull-right time"><i class="fa fa-clock-o"></i>' + value.created_at + '</small>' +
                                     '<h5 class="to_user ">' + value.first_name + ' ' + value.last_name + '</h5>' +
@@ -347,12 +336,10 @@ $(document).ready(function () {
             }
         });
     }
-
     $('.button').click(function () {
         var smile = $(this).attr('smile');
         var message = $('.send-message').val();
         $('.send-message').val(message + '' + smile + '');
-        //console.log(smile);
     });
 
     $('.send-message').bind('keypress', function (e) {
@@ -388,36 +375,46 @@ $(document).ready(function () {
                     data: formdata,
                     success: function (data) {
                         var jsonData = $.parseJSON(data);
-                        // console.log(jsonData);
+                        console.log(jsonData);
                         if (jsonData) {
-                            var image = '';
-                            if (jsonData.image) {
-                                image = '<img src="/users_image/imagesinmessage/' + jsonData.image + '" height="100" width="100">';
-                            } else {
+                            $.each(jsonData, function (key, value) {
                                 var image = '';
-                            }
+                                if (jsonData.image) {
+                                    image = '<img src="/users_image/imagesinmessage/' + jsonData.image + '" height="100" width="100">';
+                                } else {
+                                    var image = '';
+                                }
 
-                            var t = new Date();
-                            var h = t.getHours();
-                            var m = t.getMinutes();
-                            if (m < 10)
-                                m = '0' + m;
-                            var y = t.getFullYear();
-                            var M = t.getMonth();
-                            if (M < 10)
-                                M = '0' + M;
-                            var d = t.getDate();
-                            if (d < 10)
-                                d = '0' + d;
-                            var s = t.getSeconds();
-                            if (s < 10)
-                                s = '0' + s;
-                            $('.msg-wrap').append('<div class="media msg "><div class="media-body"><small class="pull-right time"><i class="fa fa-clock-o"></i>' + y + '-' + M + '-' + d + ' ' + h + ':' + m + ':' + s + '</small><h5 class="media-heading">' + current_user + '</h5><small class="col-lg-10">' + sendMessage + '</small><br><small class="col-lg-10">' + image + '</small></div></div>');
-                            mydiv.scrollTop(mydiv.prop('scrollHeight'));
-                            $('.send-message').val("");
-                            $('.fileinput').val('');
+                                var t = new Date();
+                                var h = t.getHours();
+                                var m = t.getMinutes();
+                                if (m < 10)
+                                    m = '0' + m;
+                                var y = t.getFullYear();
+                                var M = t.getMonth();
+                                if (M < 10)
+                                    M = '0' + M;
+                                var d = t.getDate();
+                                if (d < 10)
+                                    d = '0' + d;
+                                var s = t.getSeconds();
+                                if (s < 10)
+                                    s = '0' + s;
+                                $('.msg-wrap').append('<div class="media msg id_' + value.chat_id + ' "><div class="media-body"><small class="pull-right time">' +
+                                    '<i class="fa fa-clock-o"></i>' + y + '-' + M + '-' + d + ' ' + h + ':' + m + ':' + s + '</small>' +
+                                    '<h5 class="media-heading">' + current_user + '</h5>' +
+                                    '<small class="col-lg-10" id="msg_' + value.chat_id + '">' + sendMessage + '</small>' +
+                                    '<small class="col-lg-10">' + image + '</small>' +
+                                    '<span class="glyphicon glyphicon-trash delete_msg btn" id =' + value.chat_id + ' ></span> &nbsp'+
+                                    '<span type="button"  class="glyphicon glyphicon-wrench update_msg update_msg"  id =' + value.chat_id + ' data-toggle="modal"data-target="#myModal"></span>'+
+                                    '</div></div>');
+                                mydiv.scrollTop(mydiv.prop('scrollHeight'));
+                                $('.send-message').val("");
+                                $('.fileinput').val('');
+                            })
                         }
                         return true;
+
                     }
                 });
             }
@@ -458,6 +455,4 @@ $(document).ready(function () {
         });
 
     });
-
-
 });
