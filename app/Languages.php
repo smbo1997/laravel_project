@@ -16,7 +16,7 @@ class Languages{
         return App::setLocale($language);
     }
 
-    static function language(Request $request) {
+    static function pathUrl(Request $request) {
         $geturl = $request->path();
         return $currentPageUrl = (substr($geturl, 2));
     }

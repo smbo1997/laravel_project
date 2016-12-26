@@ -35,6 +35,7 @@ class UserController extends Controller {
         $this->middleware('auth');
         $lang = new Languages();
         $this->data['language'] =$lang->language;
+
     }
 
     function current_page_url(Request $request, $n) {
@@ -177,9 +178,9 @@ class UserController extends Controller {
             ->leftJoin('user_friends', function($join) {
                 $userId = Auth::id();
                 $join->on('users.id', '=', 'user_friends.from_user')
-                    ->where('user_friends.from_user', '=', $userId)
+                        ->where('user_friends.from_user', '=', $userId)
                     ->orOn('users.id', '=', 'user_friends.to_user')
-                    ->Where('user_friends.to_user', '=', $userId);
+                        ->Where('user_friends.to_user', '=', $userId);
             })
             ->where('user_friends.status', '1')
             ->get();
@@ -256,9 +257,11 @@ class UserController extends Controller {
 
     public function mymessages(Request $request) {
         $userId = Auth::user()->id;
-        $user_friends = DB::table('users')
-            ->leftJoin('user_friends', function($join) {
-                $userId = Auth::user()->id;
+
+/////////////////////????????????
+        $user_friends = DB::table('user_friends')
+            ->leftJoin('users', function($join) {
+                $userId = Auth::id();
                 $join->on('users.id', '=', 'user_friends.from_user')
                     ->where('user_friends.from_user', '=', $userId)
                     ->orOn('users.id', '=', 'user_friends.to_user')
@@ -266,6 +269,18 @@ class UserController extends Controller {
             })
             ->where('user_friends.status', '1')
             ->get();
+//////////////////////////????????????
+        $user_friends = DB::select(
+            'SELECT `users`.`id`,`users`.`email`,`users`.`first_name`,`users`.`last_name`,`users`.`image`,`user_friends`.`from_user`,`user_friends`.`to_user`
+                         FROM `user_friends`
+                         LEFT JOIN `users`
+                          ON `users`.`id` = `user_friends`.`from_user`
+                          OR `users`.`id`=`user_friends`.`to_user`
+                       WHERE  (`user_friends`.`from_user` = "' . $userId . '"   
+                            OR `user_friends`.`to_user`= "' . $userId . '") 
+                            AND  `users`.`id` <> "' . $userId . '" 
+                            AND `user_friends`.`status` = "1"'
+        );
         $this->data['userId'] = $userId;
         if (!empty($user_friends)) {
             $this->data['user_friends'] = $user_friends;
@@ -404,7 +419,7 @@ class UserController extends Controller {
     public function mymail(Request $request) {
         $userId = Auth::user()->id;
         $user_friends = DB::table('user_friends')
-            ->leftJoin('users','users.id', '=', 'users_messages.from_user')
+            ->leftJoin('users','users.id', '=', 'from_user')
             ->where([
                 ['from_user', '=', $userId]
             ])
@@ -571,7 +586,7 @@ class UserController extends Controller {
         $update_content = $request_all['new_msg'];
         $userdata = DB::table('users_messages')
             ->where('chat_id', $msg_id)
-            ->update(['content' => $update_content]);
+            ->update(['content' => $update_content, 'update_msg' =>1]);
         return 1;
     }
 
@@ -590,5 +605,15 @@ class UserController extends Controller {
             DB::table('users_messages')->where('chat_id', '=', $chat_id)->delete();
         }
         return 1;
+    }
+
+    public function setUpdatemsg(){
+        $auth_id = Auth::id();
+        $updatemsg = DB::table('users_messages')
+            ->select('*')
+            ->where('update_msg',1)
+            ->get();
+        DB::table('users_messages')->where('update_msg', 1)->where('from_user','<>',$auth_id)->update(array('update_msg' => 0));
+        return json_encode($updatemsg);
     }
 }

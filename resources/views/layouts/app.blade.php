@@ -35,6 +35,15 @@ echo json_encode([
     </script>
 </head>
 <body>
+<?php
+$action = explode("@", Route::currentRouteAction());
+$current_action = $action[count($action)-1];
+
+//kam senc
+
+//$geturl = Request::path();
+//$current_action = substr($geturl, 3);
+ ?>
     <div id="app">
         <nav class="navbar navbar-default navbar-static-top">
             <div class="container">
@@ -71,13 +80,13 @@ echo json_encode([
                     </a>
                         <ul class="nav navbar-nav">
                             &nbsp;<li>
-                                <a href={{url('/en/')}}><img src="../image/en.gif" alt=""></a>
+                                <a href={{url("/en/$current_action")}}><img src="../image/en.gif" alt=""></a>
                             </li>
                             <li>
-                                <a href={{url('/am/home')}}><img src="../image/hy.gif" alt=""></a>
+                                <a href={{url("/am/$current_action")}}><img src="../image/hy.gif" alt=""></a>
                             </li>
                             <li>
-                                <a href={{url('/ru/home')}}><img src="../image/ru.gif" alt=""></a>
+                                <a href={{url("/ru/$current_action")}}><img src="../image/ru.gif" alt=""></a>
                             </li>
                         </ul>
 

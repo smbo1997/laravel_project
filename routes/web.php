@@ -61,6 +61,7 @@ Route::post('/seemessages', 'UserController@seemessages');
 Route::post('/sendmessagestoemail', 'UserController@sendmessagestoemail');
     // update messages
 Route::post('/update_msg', 'UserController@update_msg');
+Route::post('{locale}/setUpdatemsg', 'UserController@setUpdatemsg');
     //delete messages
 Route::post('/delete_msg', 'UserController@delete_msg');
 

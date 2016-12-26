@@ -181,6 +181,7 @@ $(document).ready(function () {
 
 
     $('.create_chat').click(function () {
+        setInterval(setUpdatemsg,6000);
         setInterval(function () {
             userId = $('#content-messages').attr('data-send-user');
             var message_count = $('#message_count').attr('data-count');
@@ -204,7 +205,6 @@ $(document).ready(function () {
             url: '/user_messages/' + userId,
             type: 'GET',
             success: function (data) {
-                console.log(data)
                 var html = '<div id="message_count" data-count=' + data.count_messages + '>Count Messages' + ' ' + data.count_messages + '</div>';
                 if (data.getMessages.length > 0) {
                     var images = '';
@@ -220,9 +220,9 @@ $(document).ready(function () {
                                     '<div class="media-body">' +
                                     '<small class="pull-right time"><i class="fa fa-clock-o"></i>' + value.created_at + '</small>' +
                                     '<h5 class="to_user ">' + value.first_name + ' ' + value.last_name + '</h5>' +
-                                    '<small class="col-lg-10" >' + value.content + '</small>' +
+                                    '<small class="col-lg-10" id="msg_' + value.chat_id + '">' + value.content + '</small>' +
                                     '<small class="col-lg-10">' + images + '</small>' +
-                                    '<span class="glyphicon glyphicon-trash delete_msg" id =' + value.chat_id + ' ></span> &nbsp'+
+                                    '<span class="glyphicon glyphicon-trash delete_msg btn" id =' + value.chat_id + ' ></span> &nbsp'+
 
 
                                     '</div>' +
@@ -239,8 +239,8 @@ $(document).ready(function () {
                                     '<h5 class="media-heading">' + value.first_name + ' ' + value.last_name + '</h5>' +
                                     '<small class="col-lg-10" id="msg_' + value.chat_id + '">' + value.content + '</small>' +
                                     '<small class="col-lg-10">' + images + '</small>' +
-                                    '<span class="glyphicon glyphicon-trash delete_msg" id =' + value.chat_id + ' ></span> &nbsp'+
-                                    '<span type="button"  class="glyphicon glyphicon-wrench update_msg update_msg" data-toggle="modal" id =' + value.chat_id + ' data-target="#myModal"></span>'+
+                                    '<span class="glyphicon glyphicon-trash delete_msg btn" id =' + value.chat_id + ' ></span> &nbsp'+
+                                    '<span type="button"  class="glyphicon glyphicon-wrench update_msg update_msg btn" data-toggle="modal" id =' + value.chat_id + ' data-target="#myModal"></span>'+
                                     '</div>' +
                                     '</div>';
                             }
@@ -265,6 +265,23 @@ $(document).ready(function () {
         $('.modal-body').html( msg);
         $('.update_my_msg').attr('id', msg_id);
     });
+
+
+//   setinterval update msg
+    function setUpdatemsg(){
+        $.ajax({
+            type:'post',
+            url:"setUpdatemsg",
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            success:function(data_all){
+               var update_msg =JSON.parse(data_all);
+                    $.each(update_msg, function (key, value) {
+                        $('#msg_'+value.chat_id).text(value.content);
+                    })
+            }
+        });
+    }
+
 
     $(document).on( "click", ".update_my_msg", function() {
         var msg_id = $(this).attr('id');
@@ -322,9 +339,9 @@ $(document).ready(function () {
                                     '<div class="media-body">' +
                                     '<small class="pull-right time"><i class="fa fa-clock-o"></i>' + value.created_at + '</small>' +
                                     '<h5 class="to_user ">' + value.first_name + ' ' + value.last_name + '</h5>' +
-                                    '<small class="col-lg-10">' + value.content + '</small>' +
+                                    '<small class="col-lg-10" id="msg_' + value.chat_id + '">' + value.content + '</small>' +
                                     '<small class="col-lg-10">' + image + '</small>' +
-                                    '<span class="glyphicon glyphicon-trash delete_msg" id =' + value.chat_id + ' ></span> &nbsp'+
+                                    '<span class="glyphicon glyphicon-trash delete_msg btn" id =' + value.chat_id + ' ></span> &nbsp'+
                                     '</div>' +
                                     '</div>';
                         }
@@ -375,7 +392,6 @@ $(document).ready(function () {
                     data: formdata,
                     success: function (data) {
                         var jsonData = $.parseJSON(data);
-                        console.log(jsonData);
                         if (jsonData) {
                             $.each(jsonData, function (key, value) {
                                 var image = '';
@@ -406,7 +422,7 @@ $(document).ready(function () {
                                     '<small class="col-lg-10" id="msg_' + value.chat_id + '">' + sendMessage + '</small>' +
                                     '<small class="col-lg-10">' + image + '</small>' +
                                     '<span class="glyphicon glyphicon-trash delete_msg btn" id =' + value.chat_id + ' ></span> &nbsp'+
-                                    '<span type="button"  class="glyphicon glyphicon-wrench update_msg update_msg"  id =' + value.chat_id + ' data-toggle="modal"data-target="#myModal"></span>'+
+                                    '<span type="button"  class="glyphicon glyphicon-wrench update_msg update_msg btn"  id =' + value.chat_id + ' data-toggle="modal"data-target="#myModal"></span>'+
                                     '</div></div>');
                                 mydiv.scrollTop(mydiv.prop('scrollHeight'));
                                 $('.send-message').val("");
