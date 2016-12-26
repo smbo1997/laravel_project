@@ -59,6 +59,9 @@ Route::post('/getnotreadmessages', 'UserController@getnotreadmessages');
 Route::post('/getnotreadusersmessages', 'UserController@getnotreadusersmessages');
 Route::post('/seemessages', 'UserController@seemessages');
 Route::post('/sendmessagestoemail', 'UserController@sendmessagestoemail');
+Route::post('/updatedmessages', 'UserController@updatedmessages');
+
+
     // update messages
 Route::post('/update_msg', 'UserController@update_msg');
     //delete messages

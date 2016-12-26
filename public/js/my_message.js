@@ -181,18 +181,20 @@ $(document).ready(function () {
 
 
     $('.create_chat').click(function () {
+        var userId = $(this).val();
         setInterval(function () {
             userId = $('#content-messages').attr('data-send-user');
             var message_count = $('#message_count').attr('data-count');
             receiveMessages(userId, message_count)
         }, 5000);
+
+
         $('.send-message').removeAttr('disabled');
         $('.fileinput').removeAttr('disabled');
         $('.mailbutton').removeAttr('disabled');
         $('.send-message').val('');
         $('.smiles').css('display', 'block');
         var useremail = $(this).attr('useremail');
-        var userId = $(this).val();
         $('.mailbutton').attr('userid', userId);
         $('.mailbutton').attr('useremail', useremail);
         $('.send-message').attr('senduser', userId);
@@ -220,7 +222,7 @@ $(document).ready(function () {
                                     '<div class="media-body">' +
                                     '<small class="pull-right time"><i class="fa fa-clock-o"></i>' + value.created_at + '</small>' +
                                     '<h5 class="to_user ">' + value.first_name + ' ' + value.last_name + '</h5>' +
-                                    '<small class="col-lg-10" >' + value.content + '</small>' +
+                                    '<small class="col-lg-10" id="message_'+value.chat_id+'" >' + value.content + '</small>' +
                                     '<small class="col-lg-10">' + images + '</small>' +
                                     '<span class="glyphicon glyphicon-trash delete_msg" id =' + value.chat_id + ' ></span> &nbsp'+
 
@@ -288,10 +290,8 @@ $(document).ready(function () {
     // delete msg
 
     $(document).on( "click", ".delete_msg", function() {
-
         var msg_id = $(this).attr('id');
-        alert('.id_'+msg_id)
-        $('.id_'+msg_id).remove();
+
         $.ajax({
             url: '/delete_msg',
             type: 'POST',
@@ -299,7 +299,7 @@ $(document).ready(function () {
             data: {msg_id: msg_id},
             success: function (data) {
                 if(data == 1){
-
+                    $('.id_'+msg_id).remove();
                 }
             }
 
@@ -320,6 +320,7 @@ $(document).ready(function () {
             success: function (data) {
                 var new_message_count = data.count_messages;
                 if (data.updatedMessages) {
+                    console.log(data.updatedMessages);
                     var html = '';
                     var image = '';
                     $.each(data.updatedMessages, function (key, value) {
@@ -329,11 +330,11 @@ $(document).ready(function () {
                             } else {
                                 var image = '';
                             }
-                            html += '<div class="media msg ">' +
+                            html += '<div class="media msg id_'+value.chat_id+'">' +
                                     '<div class="media-body">' +
                                     '<small class="pull-right time"><i class="fa fa-clock-o"></i>' + value.created_at + '</small>' +
                                     '<h5 class="to_user ">' + value.first_name + ' ' + value.last_name + '</h5>' +
-                                    '<small class="col-lg-10">' + value.content + '</small>' +
+                                    '<small class="col-lg-10" id="message_'+value.chat_id+'" >' + value.content + '</small>' +
                                     '<small class="col-lg-10">' + image + '</small>' +
                                     '<span class="glyphicon glyphicon-trash delete_msg" id =' + value.chat_id + ' ></span> &nbsp'+
                                     '</div>' +
@@ -352,7 +353,6 @@ $(document).ready(function () {
         var smile = $(this).attr('smile');
         var message = $('.send-message').val();
         $('.send-message').val(message + '' + smile + '');
-        //console.log(smile);
     });
 
     $('.send-message').bind('keypress', function (e) {
@@ -388,41 +388,41 @@ $(document).ready(function () {
                     data: formdata,
                     success: function (data) {
                         var jsonData = $.parseJSON(data);
-                        // console.log(jsonData);
+                        var images = '';
+                        var html = '';
+                        console.log(jsonData);
                         if (jsonData) {
-                            var image = '';
-                            if (jsonData.image) {
-                                image = '<img src="/users_image/imagesinmessage/' + jsonData.image + '" height="100" width="100">';
-                            } else {
-                                var image = '';
-                            }
+                            $.each(jsonData, function (key, value) {
+                                console.log(value.first_name);
+                                if (value.images !== null) {
+                                    images = '<img src="/users_image/imagesinmessage/' + value.images + '" height="100" width="100">';
+                                } else {
+                                    images = '';
+                                    html += '<div class="media msg id_' + value.chat_id + ' ">' +
+                                        '<div class="media-body">' +
+                                        '<small class="pull-right time"><i class="fa fa-clock-o"></i>' + value.created_at + '</small>' +
+                                        '<h5 class="media-heading">' + value.first_name + ' ' + value.last_name + '</h5>' +
+                                        '<small class="col-lg-10" id="msg_' + value.chat_id + '">' + value.content + '</small>' +
+                                        '<small class="col-lg-10">' + images + '</small>' +
+                                        '<span class="glyphicon glyphicon-trash delete_msg" id =' + value.chat_id + ' ></span> &nbsp' +
+                                        '<span type="button"  class="glyphicon glyphicon-wrench update_msg update_msg" data-toggle="modal" id =' + value.chat_id + ' data-target="#myModal"></span>' +
+                                        '</div>' +
+                                        '</div>';
+                                }
+                                $('.msg-wrap').append(html);
+                                mydiv.scrollTop(mydiv.prop('scrollHeight'));
+                                $('.send-message').val("");
+                                $('.fileinput').val('');
+                            });
 
-                            var t = new Date();
-                            var h = t.getHours();
-                            var m = t.getMinutes();
-                            if (m < 10)
-                                m = '0' + m;
-                            var y = t.getFullYear();
-                            var M = t.getMonth();
-                            if (M < 10)
-                                M = '0' + M;
-                            var d = t.getDate();
-                            if (d < 10)
-                                d = '0' + d;
-                            var s = t.getSeconds();
-                            if (s < 10)
-                                s = '0' + s;
-                            $('.msg-wrap').append('<div class="media msg "><div class="media-body"><small class="pull-right time"><i class="fa fa-clock-o"></i>' + y + '-' + M + '-' + d + ' ' + h + ':' + m + ':' + s + '</small><h5 class="media-heading">' + current_user + '</h5><small class="col-lg-10">' + sendMessage + '</small><br><small class="col-lg-10">' + image + '</small></div></div>');
-                            mydiv.scrollTop(mydiv.prop('scrollHeight'));
-                            $('.send-message').val("");
-                            $('.fileinput').val('');
                         }
                         return true;
                     }
                 });
             }
-        }
-    });
+            }
+            });
+
 
 
     $('.send-message').click(function () {
@@ -433,7 +433,6 @@ $(document).ready(function () {
             type: 'POST',
             data: {_token: token, to_user: userId},
             success: function (data) {
-
                 $('#usernotsee_' + userId).text('');
 
             }
@@ -448,7 +447,7 @@ $(document).ready(function () {
         var username = $('.user_name').attr('id');
         var token = $("input[name=_token]").val();
         $.ajax({
-            url: '/sendmessagestoemail',
+            url: '/updatedmessages',
             type: 'POST',
             data: {_token: token, to_user: userId, to_useremail: to_useremail, useremail: useremail, username: username},
             success: function (data) {
@@ -458,6 +457,31 @@ $(document).ready(function () {
         });
 
     });
+
+    setInterval(function () {
+        updatedmessages()
+    }, 6000);
+
+    function updatedmessages() {
+        var token = $("input[name=_token]").val();
+        userId = $('.send-message').attr('senduser');
+        if(userId){
+            $.ajax({
+                url: '/updatedmessages',
+                type: 'POST',
+                data: {_token: token, userId: userId},
+                success: function (data) {
+                    var jsonData = $.parseJSON(data);
+                    if(jsonData.updatedmessages){
+                        $.each(jsonData.updatedmessages,function (key,value) {
+                            $('#message_' + value.chat_id).text(value.content);
+                        })
+                    }
+                }
+            });
+        }
+
+    }
 
 
 });
