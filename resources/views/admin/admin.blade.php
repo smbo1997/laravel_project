@@ -1,15 +1,3 @@
-<form action="home_ad" method="post">
-    {{ csrf_field() }}
-        <div >
-            <input type="email" name="email">
-            <br>
-            <br>
-            <input type="password" name="password">
-            <br>
-            <br>
-            <input type="submit" value=" Login Admin" class="button">
-        </div>
-</form>
 <style>
     body{
         background-color: #b2dba1;
@@ -31,3 +19,16 @@
         font-size: 200%;
     }
 </style>
+
+<form action="home_ad" method="post">
+    {{ csrf_field() }}
+        <div >
+            <input type="email" name="email">
+            <br>
+            <br>
+            <input type="password" name="password">
+            <br>
+            <br>
+            <input type="submit" value=" Login Admin" class="button">
+        </div>
+</form>

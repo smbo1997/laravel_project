@@ -38,10 +38,20 @@ class AdminController extends Controller
 
     public function usersadmin(){
         $users = User::all();
-//        foreach ($users as $user) {
-//            print_r ($user->first_name);
-//        }
-
         return view('adminka', ['users' => $users]);
+    }
+
+    public function update_user(Request $request){
+        $result = $request->all();
+        $user_id = $result['id_user'];
+        $first_name = $result['first_name'];
+        $last_name = $result['last_name'];
+        $update_user = User::where('id', '=', $user_id)->update(['first_name' =>  $first_name , 'last_name' => $last_name]);
+    }
+
+    public function delete_user(Request $request){
+        $result = $request->all();
+        $user_id = $result['id_user'];
+        $affectedRows = User::where('id', '=', $user_id)->delete();
     }
 }
