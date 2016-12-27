@@ -81,3 +81,10 @@ Route::post('/receiveSmallchatMessages', 'UserController@receiveSmallchatMessage
 //calendar
 Route::get('/calendar', 'UserController@calendar');
 Route::get('/calendardata', 'UserController@calendardata');
+
+/////////adminka
+
+
+Route::get('{locale}/admin', 'AdminController@index');
+Route::post('{locale}/home_ad', 'AdminController@home_ad');
+Route::get('{locale}/usersadmin', 'AdminController@usersadmin');

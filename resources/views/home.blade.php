@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<?php //echo '<pre>';print_r($current_page_url); ?>
 <div class="container">
     <div class="row">
         <h2 class="username"><?php echo Auth::user()->first_name . ' ' . Auth::user()->last_name; ?></h2>
@@ -18,4 +17,4 @@
         </div>
 
     </div>
-    @endsection
+@endsection
