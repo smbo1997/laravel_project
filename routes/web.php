@@ -93,3 +93,4 @@ Route::post('/delete_user', 'AdminController@delete_user');
 Route::get('/user_view/{id}', 'AdminController@user_view');
 Route::get('/user_messagesadmin', 'AdminController@user_messagesadmin');
 Route::post('/add_user_admin', 'AdminController@add_user_admin');
+Route::post('/admin_logout', 'AdminController@adminlogout');

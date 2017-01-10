@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Session;
 class AdminController extends Controller
 {
     public function __construct(Request $request) {
-//        $this->middleware('auth');
         $lang = new Languages();
         $this->data['language'] =$lang->language;
 
@@ -124,7 +123,7 @@ class AdminController extends Controller
         $last_name = $datas['last_name'];
         $email = $datas['email'];
         $date = $datas['date'];
-//        $gender = $datas['gender'];
+        $gender = $datas['gender'];
         $password = bcrypt($datas['password']);
         DB::table('users')->insert(
             array(
@@ -132,9 +131,22 @@ class AdminController extends Controller
                 'last_name' => $last_name,
                 'email' => $email,
                 'birthday' => $date,
-                'gender' => 'Male',
+                'gender' => $gender,
                 'password' => $password,
             )
         );
+    }
+
+    public function adminlogout() {
+        if (!(session()->has('admindata'))) {
+            return redirect('admin');
+        }
+        $logout = DB::table('admin')
+            ->where('id', session()->get('admindata'))
+            ->update(['logged' => 0]);
+        if ($logout) {
+            session()->forget('admindata');
+            return redirect('admin');
+        }
     }
 }

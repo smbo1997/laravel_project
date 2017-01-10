@@ -23,7 +23,7 @@
 <body>
 <br>
 <br>
-
+<a href="admin_logout" class="btn btn-primary">Log Out</a>
 <div class="container">
     <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add user</button><br/><br/>
     <table id="example" class="display" cellspacing="0" width="100%">
