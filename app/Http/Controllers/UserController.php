@@ -178,9 +178,9 @@ class UserController extends Controller {
             ->leftJoin('user_friends', function($join) {
                 $userId = Auth::id();
                 $join->on('users.id', '=', 'user_friends.from_user')
-                        ->where('user_friends.from_user', '=', $userId)
+                        ->where('user_friends.to_user', '=', $userId)
                     ->orOn('users.id', '=', 'user_friends.to_user')
-                        ->Where('user_friends.to_user', '=', $userId);
+                        ->Where('user_friends.from_user', '=', $userId);
             })
             ->where('user_friends.status', '1')
             ->get();
@@ -263,7 +263,7 @@ class UserController extends Controller {
             ->leftJoin('users', function($join) {
                 $userId = Auth::id();
                 $join->on('users.id', '=', 'user_friends.from_user')
-                    ->where('user_friends.from_user', '=', $userId)
+                    ->where('user_friends.to_user', '=', $userId)
                     ->orOn('users.id', '=', 'user_friends.to_user')
                     ->Where('user_friends.to_user', '=', $userId);
             })

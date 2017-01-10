@@ -23,7 +23,9 @@
 <body>
 <br>
 <br>
+
 <div class="container">
+    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add user</button><br/><br/>
     <table id="example" class="display" cellspacing="0" width="100%">
         <thead>
         <tr>
@@ -40,7 +42,7 @@
             <th>Last Name</th>
             <th>Update</th>
             <th>Delete</th>
-            <th>View</th>
+            <th>View Profil</th>
         </tr>
         </tfoot>
         <tbody>
@@ -62,15 +64,55 @@
                 </button>
             </th>
             <th  id={{$user->id }}>
-                <button class="btn btn-info btn-lg" id={{$user->id }}>
-                    <span class="glyphicon glyphicon-eye-open"></span>  View
-                </button>
+                <a href="{{url('user_view/'.$user->id)}}"   class="btn btn-info btn-lg" id={{$user->id }}>
+                    <span class="glyphicon glyphicon-eye-open"></span>  View Profil
+                </a>
             </th>
         </tr>
         @endforeach
 
         </tbody>
     </table>
+
+
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add User</h4>
+                </div>
+                <div class="modal-body" >
+                    {{--First Name <br>--}}
+                    <input type="test" placeholder="first name" class="first_name" required >
+                    <br>
+                    <br>
+                    <input type="test" placeholder="last name"  class="last_name" required >
+                    <br>
+                    <br>
+                    <input type="email" placeholder="email" class="email" required >
+                    <br>
+                    <br>
+                    <input type="date" class="date" class="date" required >
+                    <br>
+                    <br>
+
+                    <select id="myselect" class="form-control" >
+                        <option value="1">Male</option>
+                        <option value="2">Female</option>
+                    </select>
+                    <br>
+                    <input type="password" placeholder="password" required  class="password">
+                    <br>
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default add_user" >Add User</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
 <!-- Latest compiled JavaScript -->
@@ -85,10 +127,13 @@
 
 <script>
     $(document).ready(function() {
-        $('#example').DataTable( {
-            "dom": '<"top"iflp<"clear">>rt<"bottom"iflp<"clear">>'
-        } );
+//        $('#example').DataTable( {
+//            "dom": '<"top"iflp<"clear">>rt<"bottom"iflp<"clear">>'
+//        } );
 
+//        $(document).ready(function () {
+            $('#example').DataTable();
+//        });
         $(document).on("click", ".update_user", function () {
             var id_user = $(this).attr('id');
             var first_name = $('.first_name_' + id_user).html();
@@ -103,7 +148,6 @@
                     last_name: last_name,
                 },
                 success: function (data) {
-//                    location.reload();
                 }
             });
         });
@@ -111,7 +155,6 @@
 
         $(document).on("click", ".delete_user", function () {
             var id_user = $(this).attr('id');
-            alert(id_user)
             $.ajax({
                 url: '/delete_user',
                 type: 'POST',
@@ -125,6 +168,31 @@
             });
         });
 
+
+        $(document).on("click", ".add_user", function () {
+            var last_name = $('.last_name').val();
+            var first_name = $('.first_name').val();
+            var email = $('.email').val();
+            var date = $('.date').val();
+            var gender = $( "#myselect option:selected" ).text();
+            var password = $('.password').val();
+            $.ajax({
+                url: '/add_user_admin',
+                type: 'POST',
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                data: {
+                    last_name: last_name,
+                    first_name: first_name,
+                    email: email,
+                    date: date,
+                    gender: gender,
+                    password: password,
+                },
+                success: function (data) {
+                    location.reload();
+                }
+            });
+        });
 
 
     } );

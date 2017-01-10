@@ -2,7 +2,7 @@
 
 return [
     'my_profile' => 'Իմ էջը',
-    'my_images' => 'իմ պատկերները',
+   'my_images' => 'իմ պատկերները',
     'my_friends' => 'Իմ ընկերները',
     'my_messages' => 'իմ ուղերձները',
     'laravel' => 'Լարվել',
