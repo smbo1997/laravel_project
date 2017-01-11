@@ -295,20 +295,22 @@ class UserController extends Controller {
                 ->where('to_user', $currentuser)
                 ->where('delivered', 0)
                 ->update([ 'delivered' => 1]);
+
+
+
         $getMessages = DB::table('users_messages')
-            ->leftJoin('users','users.id', '=', 'users_messages.from_user')
-                ->where([
-                    ['from_user', '=', $currentuser],
-                    ['to_user', '=', $to_user_id],
-                    ['delete_msg', '!=', $currentuser]
-                ])
-                ->orwhere([
-                    ['from_user', '=', $to_user_id],
-                    ['to_user', '=', $currentuser],
-                    ['delete_msg', '!=', $currentuser]
-                ])
-                ->orderBy('users_messages.created_at', 'ASC')
-            ->get();
+            ->leftJoin('users','users.id',  'from_user')
+                    ->where([
+                        ['from_user', '=', $currentuser],
+                        ['to_user', '=', $to_user_id],
+                        ['delete_msg','!=',$currentuser]
+                    ])
+                    ->orwhere([
+                        ['from_user', '=', $to_user_id],
+                        ['to_user', '=', $currentuser],
+                        ['delete_msg','!=',$currentuser]
+                    ]) ->get();
+
         $count_messages = count($getMessages);
         return response()->json(array('getMessages' => $getMessages, 'count_messages' => $count_messages));
     }
@@ -370,7 +372,12 @@ class UserController extends Controller {
                 'content' => $messageContent,
                 'delivered' => 0
             ]);
-            $result_content = DB::table('users_messages')->select('*')->where('content',$messageContent)->where('to_user',$userId)->where('from_user',$fromUserId)->first();
+            $result_content = DB::table('users_messages')
+                                        ->select('*')
+                                        ->leftJoin('users','users.id','=','users_messages.from_user')
+                                        ->where('content',$messageContent)
+                                        ->where('to_user',$userId)
+                                        ->where('from_user',$fromUserId)->first();
             return json_encode(array('result_msg' => $result_content));
         }
     }
@@ -388,20 +395,27 @@ class UserController extends Controller {
         $currentuser = Auth::id();
         $messageCount = $request->message_count;
         $userId = $request->userId;
-        $getMessages = DB::table('users_messages')
-            ->leftJoin('users','users.id', '=', 'users_messages.from_user')
-            ->where([
-                ['from_user', '=', $currentuser],
-                ['to_user', '=', $userId],
-                ['delete_msg', '!=', $currentuser]
-            ])
-            ->orwhere([
-                ['from_user', '=', $userId],
-                ['to_user', '=', $currentuser],
-                ['delete_msg', '!=', $currentuser]
-            ])
-            ->orderBy('users_messages.created_at', 'ASC')
-        ->get();
+        $getMessages = DB::select(
+                        'SELECT `users_messages`.`chat_id`,`users_messages`.`from_user`,`users_messages`.`to_user`,`users_messages`.`content`,`users_messages`.`created_at`, `users`.`first_name`,`users`.`last_name`     
+                        FROM `users_messages`
+                        LEFT JOIN `users` ON `users`.`id` = `users_messages`.`from_user`
+                        WHERE  ((from_user = "' . $currentuser . '" AND to_user="' . $userId . '") OR (from_user ="' . $userId . '" AND to_user="' . $currentuser . '" ))  AND delete_msg != "' . $currentuser . '"
+                        ORDER BY `users_messages`.`created_at` ASC'
+        );
+
+
+//        $getMessages = DB::table('users_messages')
+//            ->leftJoin('users','users.id',  'from_user')
+//            ->where([
+//                ['from_user', '=', $currentuser],
+//                ['to_user', '=', $to_user_id],
+//                ['delete_msg','!=',$currentuser]
+//            ])
+//            ->orwhere([
+//                ['from_user', '=', $to_user_id],
+//                ['to_user', '=', $currentuser],
+//                ['delete_msg','!=',$currentuser]
+//            ]) ->get();
         if (count($getMessages) > $messageCount) {
             $differentce_messages = count($getMessages) - $messageCount;
             $updatedMessages = DB::table('users_messages')
@@ -438,6 +452,8 @@ class UserController extends Controller {
         $to_mail = $request->toMail;
         $from_name = $request->fromName;
         $subject = $request->subject;
+       // $content = $request->content;
+        //echo '<pre>';print_r($to_mail);
         if (!empty($to_mail)) {
             foreach ($to_mail as $key => $value) {
                 Mail::raw('Текст письма', function ($message) use($fromMail, $from_name, $to_mail, $subject) {
@@ -586,7 +602,7 @@ class UserController extends Controller {
         $update_content = $request_all['new_msg'];
         $userdata = DB::table('users_messages')
             ->where('chat_id', $msg_id)
-            ->update(['content' => $update_content, 'update_msg' =>1]);
+            ->update(['content' => $update_content , 'update_msg' => 1]);
         return 1;
     }
 
@@ -607,13 +623,22 @@ class UserController extends Controller {
         return 1;
     }
 
-    public function setUpdatemsg(){
-        $auth_id = Auth::id();
-        $updatemsg = DB::table('users_messages')
-            ->select('*')
-            ->where('update_msg',1)
-            ->get();
-        DB::table('users_messages')->where('update_msg', 1)->where('from_user','<>',$auth_id)->update(array('update_msg' => 0));
-        return json_encode($updatemsg);
-    }
+
+        public function updatedmessages(Request $request){
+            $to_user = Auth::id();
+            $from_user = $request->userId;
+            $updatedmessages = DB::table('users_messages')
+                                            ->where('from_user', $from_user)
+                                            ->where('to_user', $to_user)
+                                            ->where('update_msg', 1)
+                                            ->get();
+                DB::table('users_messages')
+                ->where('from_user', $from_user)
+                ->where('to_user', $to_user)
+                ->where('update_msg', 1)
+                ->update(['update_msg' => 0]);
+            return json_encode(array('updatedmessages'=>$updatedmessages));
+//
+        }
+
 }
