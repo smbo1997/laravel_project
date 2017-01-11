@@ -10,9 +10,8 @@
   | to using a Closure or controller method. Build something great!
   |
  */
-
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/en/login');
 });
 
 //Auth::routes();
@@ -64,11 +63,8 @@ Route::post('/update_msg', 'UserController@update_msg');
 Route::post('{locale}/setUpdatemsg', 'UserController@setUpdatemsg');
     //delete messages
 Route::post('/delete_msg', 'UserController@delete_msg');
-
-
 //checkOnline
 Route::post('checkOnline', 'UserController@checkOnline');
-
 //email
 Route::get('{locale}/mymail', 'UserController@mymail');
 Route::post('/sendEmailMessage', 'UserController@sendEmailMessage');
@@ -76,14 +72,9 @@ Route::post('/sendEmailMessage', 'UserController@sendEmailMessage');
 Route::post('/getSmallChatMessages', 'UserController@getSmallChatMessages');
 Route::post('/sendSmallChatmessage', 'UserController@sendSmallChatmessage');
 Route::post('/receiveSmallchatMessages', 'UserController@receiveSmallchatMessages');
-
-
 //calendar
 Route::get('/calendar', 'UserController@calendar');
 Route::get('/calendardata', 'UserController@calendardata');
-
-
-
 /////////adminka
 Route::get('{locale}/admin', 'AdminController@index');
 Route::post('{locale}/home_ad', 'AdminController@home_ad');
@@ -93,4 +84,4 @@ Route::post('/delete_user', 'AdminController@delete_user');
 Route::get('/user_view/{id}', 'AdminController@user_view');
 Route::get('/user_messagesadmin', 'AdminController@user_messagesadmin');
 Route::post('/add_user_admin', 'AdminController@add_user_admin');
-Route::post('/admin_logout', 'AdminController@adminlogout');
+Route::get('{locale}/admin_logout', 'AdminController@adminlogout');

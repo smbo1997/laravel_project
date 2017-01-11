@@ -38,7 +38,7 @@ echo json_encode([
 <?php
 $action = explode("@", Route::currentRouteAction());
 $current_action = $action[count($action)-1];
-
+//dd($current_action);
 //kam senc
 
 //$geturl = Request::path();
@@ -56,9 +56,8 @@ $current_action = $action[count($action)-1];
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/' . $language) }}/home">
+                    <a class="navbar-brand" href="{{ url('/' .  $language) }}/home">
                         {{ trans('translate.laravel') }}
                     </a>
                     @if (!Auth::guest())
@@ -71,7 +70,7 @@ $current_action = $action[count($action)-1];
                     <a class="navbar-brand" href="{{ url('/' . $language) }}/myfriends">
                         {{ trans('translate.my_friends') }}
                     </a>
-                    <a class="navbar-brand messageread" id="<?php echo Auth::user()->id; ?>" href="{{ url('/' . $language) }}/mymessages">
+                    <a class="navbar-brand messageread" id="<{{ Auth::user()->id }}" href="{{ url('/' . $language) }}/mymessages">
                         <i class="notread" ></i>
                         {{ trans('translate.my_messages') }}
                     </a>
@@ -104,8 +103,8 @@ $current_action = $action[count($action)-1];
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
                         @if (Auth::guest())
-                        <li><a href="<?php echo '/' . $language; ?>/login">Login</a></li>
-                        <li><a href="<?php echo '/' . $language; ?>/register">Register</a></li>
+                        <li><a href="<{{'/' . $language}}/login">Login</a></li>
+                        <li><a href="{{ '/' . $language}}/register">Register</a></li>
 
                         @else
 

@@ -137,16 +137,17 @@ class AdminController extends Controller
         );
     }
 
-    public function adminlogout() {
-        if (!(session()->has('admindata'))) {
-            return redirect('admin');
+    public function adminlogout($language) {
+        if (!(session()->has('adminuser'))) {
+            return redirect('/' . $language . '/admin');
         }
-        $logout = DB::table('admin')
-            ->where('id', session()->get('admindata'))
-            ->update(['logged' => 0]);
-        if ($logout) {
-            session()->forget('admindata');
-            return redirect('admin');
+//        $logout = DB::table('admin')
+//            ->update(['logged' => 0]);
+//        if ($logout) {]
+        else{
+            session()->forget('adminuser');
+            return redirect('/' . $language . '/admin');
         }
+//        }
     }
 }

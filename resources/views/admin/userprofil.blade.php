@@ -15,11 +15,13 @@
         padding: 25px;
     }
 </style>
-<a href="http://laravel.am/en/usersadmin" class="btn">Admin</a>
+
 
 <br>
 
 <div class="container" style='width: 60%;' >
+    <a href="http://laravel.am/en/usersadmin" class="btn btn-info btn-lg" style="float: right;">Admin</a>
+    <br>  <br>  <br>  <br>
         <div style="float:left">
             <div class="profImage col-md-5">
 
